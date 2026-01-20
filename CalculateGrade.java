@@ -69,10 +69,12 @@ public class CalculateGrade {
         double testAverage = 0; // Intializes Average score in tests to 0
         double finalScore = 0; // Intializes Final Grade in class to 0
         char grade; // Letter Grade
+        String StudentName; // Student Name
         
         Scanner scanner = new Scanner(System.in); // Create a Scanner object for user input
 
-
+        System.out.print("Enter student name: "); //Request user input from console for student name
+        StudentName = scanner.NextLine();
 
         System.out.println("Enter scores for 7 assignments:"); //Request user input from console for assignment scores
         for (int i = 1; i <= 7; i++) {
@@ -176,7 +178,7 @@ public class CalculateGrade {
             grade = 'F';
         }
 // Output final score and letter grade
-        System.out.println("With the given scores, the final score is: " + finalScore + " and the letter grade is: " + grade);
+        System.out.println("With the given scores, the final score  for " StudentName + " is: " + finalScore + " and the letter grade is: " + grade);
     scanner.close();
     }
     

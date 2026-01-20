@@ -49,101 +49,95 @@ public class CalculateGrade {
         
         Scanner scanner = new Scanner(System.in);
         
-        boolean isFirstLine = true;
-        
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            
-            // Skip header row if present
-            if (isFirstLine) {
-                if (!line.split(",")[1].matches("-?\\d+(\\.\\d+)?")) {
-                    isFirstLine = false;
-                    continue;
-                }
-                isFirstLine = false;
-            }
-            
-            String[] data = line.split(",");
-
-            StudentName = data[0].trim();
-
-            // Parse 7 assignment scores from columns 1-7
-            assignmentAverage = 0;
-            for (int i = 1; i <= 7; i++) {
-                try {
-                    assignmentScore = Double.parseDouble(data[i].trim());
-                    if (assignmentScore < 0 || assignmentScore > 100) {
-                        System.out.println("Invalid assignment score: " + assignmentScore);
-                    }
-                    assignmentAverage += assignmentScore;
-                } catch (NumberFormatException e) {
-                    System.out.println("Error parsing assignment " + i + ": " + data[i]);
-                }
-            }
-            assignmentAverage /= 7;
-            System.out.println("Assignment Average: " + assignmentAverage);
-
-            // Parse 7 test scores from columns 8-14
-            testAverage = 0;
-            for (int i = 8; i <= 14; i++) {
-                try {
-                    testScore = Double.parseDouble(data[i].trim());
-                    if (testScore < 0 || testScore > 100) {
-                        System.out.println("Invalid test score: " + testScore);
-                    }
-                    testAverage += testScore;
-                } catch (NumberFormatException e) {
-                    System.out.println("Error parsing test " + (i - 7) + ": " + data[i]);
-                }
-            }
-            testAverage /= 7;
-            System.out.println("Test Average: " + testAverage);
-            
-            // Parse midterm score from column 15
-            try {
-                midtermScore = Double.parseDouble(data[15].trim());
-                System.out.println("Midterm Score: " + midtermScore);
-            } catch (NumberFormatException e) {
-                System.out.println("Error parsing midterm: " + data[15]);
-            }
- 
-            // Parse exam score from column 16
-            try {
-                examScore = Double.parseDouble(data[16].trim());
-                System.out.println("Exam Score: " + examScore);
-            } catch (NumberFormatException e) {
-                System.out.println("Error parsing exam: " + data[16]);
-            }
-
-            score = (examScore * examWeight + midtermScore * midtermWeight + testAverage * testWeight) / 70;
-            
-            double w = ((score - 60) / 20) * 0.3;
-
-            System.out.println("Score: " + score);
-            System.out.println("Weight: " + w);
-
-            if (score >= 80) {       
-                finalScore = examScore * (examWeight / 100) + midtermScore * (midtermWeight / 100) + testAverage * (testWeight / 100) + assignmentAverage * (assignmentWeight / 100);
-            } else if (score < 80 && score >= 60) {
-                finalScore = (1 - w) * score + w * assignmentAverage;
-            } else if (score < 60) {
-                finalScore = score;
-            }
-
-            if (finalScore >= 90) {    
-                grade = 'A';
-            } else if (finalScore >= 80) {
-                grade = 'B';
-            } else if (finalScore >= 70) {
-                grade = 'C';
-            } else if (finalScore >= 60) {
-                grade = 'D';
+        // Check if there's a header row and skip it if present
+        if (scanner.hasNextLine()) {
+            String firstLine = scanner.nextLine();
+            // Only skip if it looks like a header (contains non-numeric data in score columns)
+            if (!firstLine.split(",")[1].matches("-?\\d+(\\.\\d+)?")) {
+                // It's a header, already skipped
             } else {
-                grade = 'F';
-            }
+                // It's data, process it
+                String[] data = firstLine.split(",");
 
-            System.out.println("With the given scores, the final score for " + StudentName + " is: " + finalScore + " and the letter grade is: " + grade);
-            System.out.println();
+                StudentName = data[0].trim();
+
+                // Parse 7 assignment scores from columns 1-7
+                assignmentAverage = 0;
+                for (int i = 1; i <= 7; i++) {
+                    try {
+                        assignmentScore = Double.parseDouble(data[i].trim());
+                        if (assignmentScore < 0 || assignmentScore > 100) {
+                            System.out.println("Invalid assignment score: " + assignmentScore);
+                        }
+                        assignmentAverage += assignmentScore;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error parsing assignment " + i + ": " + data[i]);
+                    }
+                }
+                assignmentAverage /= 7;
+                System.out.println("Assignment Average: " + assignmentAverage);
+
+                // Parse 7 test scores from columns 8-14
+                testAverage = 0;
+                for (int i = 8; i <= 14; i++) {
+                    try {
+                        testScore = Double.parseDouble(data[i].trim());
+                        if (testScore < 0 || testScore > 100) {
+                            System.out.println("Invalid test score: " + testScore);
+                        }
+                        testAverage += testScore;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error parsing test " + (i - 7) + ": " + data[i]);
+                    }
+                }
+                testAverage /= 7;
+                System.out.println("Test Average: " + testAverage);
+                
+                // Parse midterm score from column 15
+                try {
+                    midtermScore = Double.parseDouble(data[15].trim());
+                    System.out.println("Midterm Score: " + midtermScore);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error parsing midterm: " + data[15]);
+                }
+     
+                // Parse exam score from column 16
+                try {
+                    examScore = Double.parseDouble(data[16].trim());
+                    System.out.println("Exam Score: " + examScore);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error parsing exam: " + data[16]);
+                }
+
+                score = (examScore * examWeight + midtermScore * midtermWeight + testAverage * testWeight) / 70;
+                
+                double w = ((score - 60) / 20) * 0.3;
+
+                System.out.println("Score: " + score);
+                System.out.println("Weight: " + w);
+
+                if (score >= 80) {       
+                    finalScore = examScore * (examWeight / 100) + midtermScore * (midtermWeight / 100) + testAverage * (testWeight / 100) + assignmentAverage * (assignmentWeight / 100);
+                } else if (score < 80 && score >= 60) {
+                    finalScore = (1 - w) * score + w * assignmentAverage;
+                } else if (score < 60) {
+                    finalScore = score;
+                }
+
+                if (finalScore >= 90) {    
+                    grade = 'A';
+                } else if (finalScore >= 80) {
+                    grade = 'B';
+                } else if (finalScore >= 70) {
+                    grade = 'C';
+                } else if (finalScore >= 60) {
+                    grade = 'D';
+                } else {
+                    grade = 'F';
+                }
+
+                System.out.println("With the given scores, the final score for " + StudentName + " is: " + finalScore + " and the letter grade is: " + grade);
+            }
         }
         scanner.close();
     }

@@ -96,6 +96,9 @@ public class CalculateGrade {
                 // Parse midterm score from column 15
                 try {
                     midtermScore = Double.parseDouble(data[15].trim());
+                    if (midtermScore < 0 || midtermScore > 100) {
+                        System.out.println("Invalid midterm score: " + midtermScore);
+                    }
                     System.out.println("Midterm Score: " + midtermScore);
                 } catch (NumberFormatException e) {
                     System.out.println("Error parsing midterm: " + data[15]);
@@ -104,9 +107,12 @@ public class CalculateGrade {
                 // Parse exam score from column 16
                 try {
                     examScore = Double.parseDouble(data[16].trim());
+                    if (examScore < 0 || examScore > 100) {
+                        System.out.println("Invalid exam score: " + examScore);
+                    }
                     System.out.println("Exam Score: " + examScore);
                 } catch (NumberFormatException e) {
-                    System.out.println("Error parsing exam: " + data[16]);
+                    System.out.println("Error in exam score: " + data[16]);
                 }
 
                 score = (examScore * examWeight + midtermScore * midtermWeight + testAverage * testWeight) / 70;

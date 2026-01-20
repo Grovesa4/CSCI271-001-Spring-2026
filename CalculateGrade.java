@@ -52,6 +52,7 @@
  * 
  *******************************************************************/
 
+import java.util.Scanner;
 
 public class CalculateGrade {
         public static void main(String[] args) {
@@ -69,7 +70,7 @@ public class CalculateGrade {
         double finalScore = 0; // Intializes Final Grade in class to 0
         char grade; // Letter Grade
         
-        
+        Scanner scanner = new Scanner(System.in); // Create a Scanner object for user input
 
 
 
@@ -77,7 +78,7 @@ public class CalculateGrade {
         for (int i = 1; i <= 7; i++) {
             while (true) {
                 try {// Input validation loop to ensure assignment scores are between 0 and 100
-                    assignmentScore = Double.parseDouble(System.console().readLine("Assignment " + i + " score: "));
+                    assignmentScore = Double.parseDouble(scanner.NextLine("Assignment " + i + " score: "));
                     if (assignmentScore < 0 || assignmentScore > 100) {
                         System.out.println("Please enter a valid score between 0 and 100.");
                         continue;
@@ -98,7 +99,7 @@ public class CalculateGrade {
         for (int i = 1; i <= 7; i++) {
             while (true) { // Input validation loop to ensure test scores are between 0 and 100
                 try {
-                    testScore = Double.parseDouble(System.console().readLine("Test " + i + " score: "));
+                    testScore = Double.parseDouble(scanner.NextLine("Test " + i + " score: "));
                     if (testScore < 0 || testScore > 100) {
                         System.out.println("Please enter a valid score between 0 and 100.");
                         continue;
@@ -117,7 +118,7 @@ public class CalculateGrade {
         System.out.print("Enter midterm score: "); //Requests user input from console for midterm score.
         while(true) { // Input validation loop to ensure midterm score is between 0 and 100
             try {
-                midtermScore = Double.parseDouble(System.console().readLine());
+                midtermScore = Double.parseDouble(scanner.NextLine());
                 if (midtermScore < 0 || midtermScore > 100) {
                     System.out.println("Please enter a valid score between 0 and 100.");
                     continue;
@@ -132,7 +133,7 @@ public class CalculateGrade {
         System.out.print("Enter exam score: "); //Requests user input from console for final exam score.
         while(true) { // Input validation loop to ensure exam score is between 0 and 100
             try {
-                examScore = Double.parseDouble(System.console().readLine());
+                examScore = Double.parseDouble(scanner.NextLine());
                 if (examScore < 0 || examScore > 100) {
                     System.out.println("Please enter a valid score between 0 and 100.");
                     continue;
@@ -176,5 +177,7 @@ public class CalculateGrade {
         }
 // Output final score and letter grade
         System.out.println("With the given scores, the final score is: " + finalScore + " and the letter grade is: " + grade);
+    scanner.close();
     }
+    
 }

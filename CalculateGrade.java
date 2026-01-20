@@ -73,7 +73,7 @@ public class CalculateGrade {
         
         Scanner scanner = new Scanner(System.in); // Create a Scanner object for user input
 
-        System.out.print("Enter student name: "); //Request user input from console for student name
+        System.out.println("Enter student name: "); //Request user input from console for student name
         StudentName = scanner.NextLine();
 
         System.out.println("Enter scores for 7 assignments:"); //Request user input from console for assignment scores

@@ -64,15 +64,11 @@ public class CalculateGrade {
                 // Parse 7 assignment scores from columns 1-7
                 assignmentAverage = 0;
                 for (int i = 1; i <= 7; i++) {
-                    try {
-                        assignmentScore = Double.parseDouble(data[i].trim());
-                        if (assignmentScore < 0 || assignmentScore > 100) {
-                            System.out.println("Invalid assignment score: " + assignmentScore);
-                        }
-                        assignmentAverage += assignmentScore;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error parsing assignment " + i + ": " + data[i]);
+                    assignmentScore = Double.parseDouble(data[i].trim());
+                    if (assignmentScore < 0 || assignmentScore > 100) {
+                        System.out.println("Invalid assignment score: " + assignmentScore);
                     }
+                    assignmentAverage += assignmentScore;
                 }
                 assignmentAverage /= 7;
                 System.out.println("Assignment Average: " + assignmentAverage);
@@ -80,40 +76,28 @@ public class CalculateGrade {
                 // Parse 7 test scores from columns 8-14
                 testAverage = 0;
                 for (int i = 8; i <= 14; i++) {
-                    try {
-                        testScore = Double.parseDouble(data[i].trim());
-                        if (testScore < 0 || testScore > 100) {
-                            System.out.println("Invalid test score: " + testScore);
-                        }
-                        testAverage += testScore;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error parsing test " + (i - 7) + ": " + data[i]);
+                    testScore = Double.parseDouble(data[i].trim());
+                    if (testScore < 0 || testScore > 100) {
+                        System.out.println("Invalid test score: " + testScore);
                     }
+                    testAverage += testScore;
                 }
                 testAverage /= 7;
                 System.out.println("Test Average: " + testAverage);
                 
                 // Parse midterm score from column 15
-                try {
-                    midtermScore = Double.parseDouble(data[15].trim());
-                    if (midtermScore < 0 || midtermScore > 100) {
-                        System.out.println("Invalid midterm score: " + midtermScore);
-                    }
-                    System.out.println("Midterm Score: " + midtermScore);
-                } catch (NumberFormatException e) {
-                    System.out.println("Error parsing midterm: " + data[15]);
+                midtermScore = Double.parseDouble(data[15].trim());
+                if (midtermScore < 0 || midtermScore > 100) {
+                    System.out.println("Invalid midterm score: " + midtermScore);
                 }
+                System.out.println("Midterm Score: " + midtermScore);
      
                 // Parse exam score from column 16
-                try {
-                    examScore = Double.parseDouble(data[16].trim());
-                    if (examScore < 0 || examScore > 100) {
-                        System.out.println("Invalid exam score: " + examScore);
-                    }
-                    System.out.println("Exam Score: " + examScore);
-                } catch (NumberFormatException e) {
-                    System.out.println("Error in exam score: " + data[16]);
+                examScore = Double.parseDouble(data[16].trim());
+                if (examScore < 0 || examScore > 100) {
+                    System.out.println("Invalid exam score: " + examScore);
                 }
+                System.out.println("Exam Score: " + examScore);
 
                 score = (examScore * examWeight + midtermScore * midtermWeight + testAverage * testWeight) / 70;
                 

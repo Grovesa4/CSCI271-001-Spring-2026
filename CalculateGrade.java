@@ -25,22 +25,21 @@
 * interfere with the normal operation of the supplied grading code.
 *
 * Adrian Groves
-* W30625933
 ********************************************************************/
 
-/*
-Description: This program reads student scores from standard input,
-calculates their final grades based on weighted averages of assignments,
-tests, midterm, and final exam.
-
-It handles invalid scores and outputs the final numeric and letter grades.
-
-Pre: It requires input in CSV format with a header row followed by student data rows.
-Each row should contain: A student's name, assignment scores, test scores, midterm score, and final exam score in that order.
-
-Post: For each student, it outputs their name, final numeric grade (rounded to two decimal places), and letter grade.
-
-Return: Outputs to standard output the final grades for each student or error messages for invalid scores.
+/********************************************************************
+*Description: This program reads student scores from standard input,
+*calculates their final grades based on weighted averages of assignments,
+*tests, midterm, and final exam.
+*
+*It handles invalid scores and outputs the final numeric and letter grades.
+*
+*Pre: It requires input in CSV format with a header row followed by student data rows.
+*Each row should contain: A student's name, assignment scores, test scores, midterm score, and final exam score in that order.
+*
+*Post: For each student, it outputs their name, final numeric grade (rounded to two decimal places), and letter grade.
+*
+*Return: Outputs to standard output the final grades for each student or error messages for invalid scores.
  */
 
 import java.util.Scanner;

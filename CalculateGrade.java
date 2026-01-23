@@ -28,107 +28,125 @@
 * W30625933
 ********************************************************************/
 
+/*
+Description: This program reads student scores from standard input,
+calculates their final grades based on weighted averages of assignments,
+tests, midterm, and final exam.
+
+It handles invalid scores and outputs the final numeric and letter grades.
+
+Pre: It requires input in CSV format with a header row followed by student data rows.
+Each row should contain: A student's name, assignment scores, test scores, midterm score, and final exam score in that order.
+
+Post: For each student, it outputs their name, final numeric grade (rounded to two decimal places), and letter grade.
+
+Return: Outputs to standard output the final grades for each student or error messages for invalid scores.
+ */
+
 import java.util.Scanner;
 
 public class CalculateGrade {
+
     public static void main(String[] args) {
-        double score;
-        double assignmentWeight = 30;
-        double examWeight = 40;
-        double midtermWeight = 20;
-        double testWeight = 10;
-        double assignmentScore = 0;
-        double assignmentAverage = 0;
-        double examScore = 0;
-        double midtermScore = 0;
-        double testScore = 0;
-        double testAverage = 0;
-        double finalScore = 0;
-        char grade;
-        String StudentName;
-        
+
         Scanner scanner = new Scanner(System.in);
-        
-        // Check if there's a header row and skip it if present
-        if (scanner.hasNextLine()) {
-            String firstLine = scanner.nextLine();
-            // Only skip if it looks like a header (contains non-numeric data in score columns)
-            if (!firstLine.split(",")[1].matches("-?\\d+(\\.\\d+)?")) {
-                // It's a header, already skipped
-            } else {
-                // It's data, process it
-                String[] data = firstLine.split(",");
 
-                StudentName = data[0].trim();
+        // Read header row to figure out assignments and tests
+        String header = scanner.hasNextLine() ? scanner.nextLine() : "";
+        String[] columns = header.split(",");
+        int numAssignments = 0;
+        int numTests = 0;
 
-                // Parse 7 assignment scores from columns 1-7
-                assignmentAverage = 0;
-                for (int i = 1; i <= 7; i++) {
-                    assignmentScore = Double.parseDouble(data[i].trim());
-                    if (assignmentScore < 0 || assignmentScore > 100) {
-                        System.out.println("Invalid assignment score: " + assignmentScore);
-                    }
-                    assignmentAverage += assignmentScore;
-                }
-                assignmentAverage /= 7;
-                System.out.println("Assignment Average: " + assignmentAverage);
-
-                // Parse 7 test scores from columns 8-14
-                testAverage = 0;
-                for (int i = 8; i <= 14; i++) {
-                    testScore = Double.parseDouble(data[i].trim());
-                    if (testScore < 0 || testScore > 100) {
-                        System.out.println("Invalid test score: " + testScore);
-                    }
-                    testAverage += testScore;
-                }
-                testAverage /= 7;
-                System.out.println("Test Average: " + testAverage);
-                
-                // Parse midterm score from column 15
-                midtermScore = Double.parseDouble(data[15].trim());
-                if (midtermScore < 0 || midtermScore > 100) {
-                    System.out.println("Invalid midterm score: " + midtermScore);
-                }
-                System.out.println("Midterm Score: " + midtermScore);
-     
-                // Parse exam score from column 16
-                examScore = Double.parseDouble(data[16].trim());
-                if (examScore < 0 || examScore > 100) {
-                    System.out.println("Invalid exam score: " + examScore);
-                }
-                System.out.println("Exam Score: " + examScore);
-
-                score = (examScore * examWeight + midtermScore * midtermWeight + testAverage * testWeight) / 70;
-                
-                double w = ((score - 60) / 20) * 0.3;
-
-                System.out.println("Score: " + score);
-                System.out.println("Weight: " + w);
-
-                if (score >= 80) {       
-                    finalScore = examScore * (examWeight / 100) + midtermScore * (midtermWeight / 100) + testAverage * (testWeight / 100) + assignmentAverage * (assignmentWeight / 100);
-                } else if (score < 80 && score >= 60) {
-                    finalScore = (1 - w) * score + w * assignmentAverage;
-                } else if (score < 60) {
-                    finalScore = score;
-                }
-
-                if (finalScore >= 90) {    
-                    grade = 'A';
-                } else if (finalScore >= 80) {
-                    grade = 'B';
-                } else if (finalScore >= 70) {
-                    grade = 'C';
-                } else if (finalScore >= 60) {
-                    grade = 'D';
-                } else {
-                    grade = 'F';
-                }
-
-                System.out.println("With the given scores, the final score for " + StudentName + " is: " + finalScore + " and the letter grade is: " + grade);
-            }
+        // Assuming columns: Name, A1..An, T1..Tm, Midterm, Exam
+        for (int i = 1; i < columns.length - 2; i++) {
+            if (columns[i].toLowerCase().startsWith("a")) numAssignments++;
+            else if (columns[i].toLowerCase().startsWith("t")) numTests++;
         }
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] data = line.split(",");
+            if (data.length < 2 + numAssignments + numTests) {
+                System.out.println("Error: Not enough data for student.");
+                continue;
+            }
+
+            String studentName = data[0].trim();
+            boolean invalid = false;
+
+            // Compute assignment average
+            double assignmentAverage = 0;
+            for (int i = 1; i <= numAssignments; i++) {
+                double score = Double.parseDouble(data[i]);
+                if (score < 0 || score > 100) {
+                    System.out.println("Error: Assignment score for " + studentName + " out of range.");
+                    invalid = true;
+                    break;
+                }
+                assignmentAverage += score;
+            }
+            if (invalid) continue;
+            assignmentAverage /= numAssignments;
+
+            // Compute test average
+            double testAverage = 0;
+            for (int i = 1 + numAssignments; i <= numAssignments + numTests; i++) {
+                double score = Double.parseDouble(data[i]);
+                if (score < 0 || score > 100) {
+                    System.out.println("Error: Test score for " + studentName + " out of range.");
+                    invalid = true;
+                    break;
+                }
+                testAverage += score;
+            }
+            if (invalid) continue;
+            testAverage /= numTests;
+
+            // Midterm and Exam
+            double midtermScore = Double.parseDouble(data[data.length - 2]);
+            double examScore = Double.parseDouble(data[data.length - 1]);
+
+            if (midtermScore < 0 || midtermScore > 100) {
+                System.out.println("Error: Midterm score for " + studentName + " out of range.");
+                continue;
+            }
+            if (examScore < 0 || examScore > 100) {
+                System.out.println("Error: Exam score for " + studentName + " out of range.");
+                continue;
+            }
+
+            // Compute E
+            double E = (0.4 * examScore + 0.2 * midtermScore + 0.1 * testAverage) / 0.7;
+
+            // Compute final grade G
+            double finalScore;
+            if (E < 60) {
+                finalScore = E;
+            } else if (E < 80) {
+                double W = ((E - 60) / 20) * 0.3;
+                finalScore = (1 - W) * E + W * assignmentAverage;
+            } else {
+                finalScore = 0.4 * examScore + 0.2 * midtermScore + 0.1 * testAverage + 0.3 * assignmentAverage;
+            }
+
+            // Letter grade
+            char grade;
+            if (finalScore >= 90) grade = 'A';
+            else if (finalScore >= 80) grade = 'B';
+            else if (finalScore >= 70) grade = 'C';
+            else if (finalScore >= 60) grade = 'D';
+            else grade = 'F';
+
+            // Output
+            System.out.println(
+                "Student: " + studentName + 
+                ", Final Grade: " + String.format("%.2f", finalScore) + 
+                ", Letter Grade: " + grade
+            );
+        }
+
         scanner.close();
     }
 }

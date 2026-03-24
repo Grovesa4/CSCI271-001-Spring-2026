@@ -355,13 +355,3 @@ int main(){
     cout<<"DeAllocation Calls: "<<DN<<endl;
     return 0;
 }
-
-
-//Question 8: The Aysmptotic Time Complexity of AddAt(int index) is O(n) because in the worst case, we may have to traverse the entire list to find the correct position for insertion, which takes O(n) time. 
-//The actual insertion operation takes O(1) time once we have the correct position. Therefore, the overall time complexity is O(n).
-
-//Question 9: 
-
-//Question 10: There is two calls the the Delete list method in the program. The first is a manual call to ensure the deletion of the list and its nodes, and the second is the automatic call when the list goes out of scope
-// at the end of the main function. The destructor will be called twice, but since the destructor is designed to handle an empty list (when head is NULL), it will not cause any issues. The first call will delete all nodes 
-// and set head to NULL, and the second call will simply check that head is NULL and do nothing. Therefore, there should be no memory management errors as long as the destructor is implemented correctly.
